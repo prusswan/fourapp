@@ -10,7 +10,7 @@ root.gfx =
   clear: -> @ctx.clearRect 0, 0, @w, @h
   load: (onload) ->
     @sprites = new Image()
-    @sprites.src = "assets/sprites.png"
+    @sprites.src = "/assets/sprites.png"
     @sprites.onload = -> onload()
   drawSprite: (col, row, x, y) ->
     @ctx.drawImage @sprites,

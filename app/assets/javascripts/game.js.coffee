@@ -3,31 +3,31 @@
 game =
   init: ->
     if not gfx.init()
-      alert "Could not set up game canvas!" 
+      alert "Could not set up game canvas!"
       return # abort the game
 
     # Ready to play!
     gfx.clear()
-    
+
     gfx.load ->
       c = gfx.ctx
-      
+
       # c.drawImage gfx.sprites, 10, 20
-      
+
       # Our Professor's first solo performance on screen
       # gfx.drawSprite 0, 0, 100, 50
-      
+
       # Random Map
       rand = (max) -> Math.floor Math.random() * max
       for y in [0..19]
         for x in [0..23]
-          col = rand 7
+          col = 4 # rand 7
           row = rand 2
           gfx.drawSprite col, row, x * 24, y * 24
-    
+
 # Start the game running
 game.init()
-    
+
 ###
 # Title screen
 c = gfx.ctx
