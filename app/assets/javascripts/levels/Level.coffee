@@ -3,6 +3,7 @@ class Level
   h: 0
   treasures: 0
   ninjas: []
+  particles: []
 
   constructor: (level, @game) -> @load level
 
@@ -50,8 +51,7 @@ class Level
     @map[y][x] = new Block()
     if block.constructor is Treasure
       if --@treasures == 0
-        alert "Level Complete!"
-        game.reset()
+        game.dialog = new WinDialog()
 
   getBlockIndex: (x, y) -> [
     Math.floor x / gfx.tileW
@@ -76,14 +76,15 @@ class Level
     ninjas.update() for ninjas in @ninjas
 
     @checkCollision @game.player, ninjas for ninjas in @ninjas
+    @particles = (p for p in @particles when p.update())
 
   checkCollision: (p, b) ->
     if p.x + p.w >= b.x and
     p.x <= b.x + b.w and
     p.y + p.h >= b.y and
     p.y <= b.y + b.h
-      alert "You are dead."
-      game.reset()
+      sound.play "dead"
+      game.dialog = new DeadDialog()
 
   render: (gfx) ->
     # Render the level blocks
@@ -91,6 +92,7 @@ class Level
       for block, x in row
         block.render gfx, x  * gfx.tileW, y  * gfx.tileH
     ninjas.render gfx for ninjas in @ninjas
+    p.render gfx for p in @particles
 
   digAt: (dir, x, y) ->
     [xb, yb] = @getBlockIndex x, y
@@ -104,6 +106,12 @@ class Level
 
     # Building
     @map[yb + 1][xb] = new Gravel() if block.constructor is Block
+
+    @addParticles xb * gfx.tileW, (yb + 1) * gfx.tileH
+    sound.play "dig"
+
+  addParticles: (x, y) ->
+    @particles.push new Particles x, y
 
 root = exports ? this
 root.Level = Level

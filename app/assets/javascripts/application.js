@@ -15,12 +15,17 @@
 //= require turbolinks
 
 //= require gfx
+//= require sound
 //= require blocks/_Block
 //= require_tree ./blocks
 //= require entities/_Entity
 //= require_tree ./entities
 //= require_tree ./levels
-
+//= require screens/_Screen
+//= require_tree ./screens
+//= require dialogs/_Dialog
+//= require_tree ./dialogs
+//= require_tree ./particles
 
 // require player
 //= require keys

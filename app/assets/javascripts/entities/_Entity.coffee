@@ -95,6 +95,8 @@ class Entity
     if not @onLadder and not @falling
       if not (bl.solid or br.solid or bl.climbable or br.climbable)
         @falling = true
+        if this instanceof Player
+          sound.play "fall"
 
 root = exports ? this
 root.Entity = Entity

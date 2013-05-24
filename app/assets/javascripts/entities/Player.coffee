@@ -21,7 +21,17 @@ class Player extends Entity
 
     @move xo, yo
   render: (gfx) ->
-    gfx.drawSprite 0, 0, @x, @y
+    fy = fx = 0
+    isLeft = @dir is "LEFT"
+
+    if @falling
+      fx = 1 if isLeft
+      fy = 2
+    else
+      fx = 2 if isLeft
+      fx += utils.counter 2 if keys.left or keys.right
+
+    gfx.drawSprite fx, fy, @x, @y
 
   dig: ->
     return if utils.now() - @lastDig < (6 * 1000) # 6 seconds

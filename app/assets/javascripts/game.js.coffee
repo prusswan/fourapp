@@ -1,4 +1,6 @@
 @game =
+  dialog: null
+  screen: null
   init: ->
     if not gfx.init()
       alert "Sorry, no canvas"
@@ -9,29 +11,26 @@
   start: -> @running = true
 
   reset: ->
-    @player = new Player
-    @level = new Level levels[0], @
+    @dialog = null
+    @screen = new TitleScreen()
     keys.reset()
     if not @running
       @start()
       @tick()
 
-  setPlayer: (x, y, level) ->
-    @player.level = level
-    @player.x = x
-    @player.y = y
-
   tick: ->
     return if not @running
-    gfx.clear()
     @update()
     @render()
-    setTimeout (-> game.tick()), 33
+    setTimeout (=> @tick()), 33
 
   update: ->
-    @level.update()
-    @player.update()
+    if @dialog?
+      @dialog.update()
+    else
+      @screen.update()
 
   render: ->
-    @level.render gfx
-    @player.render gfx
+    gfx.clear()
+    @screen.render gfx
+    @dialog.render gfx if @dialog

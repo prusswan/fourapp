@@ -3,7 +3,7 @@ root.gfx =
   tileW: 24
   tileH: 24
   init: ->
-    canvas = document.querySelector "#game"
+    canvas = $("#game")[0]
     @ctx = canvas?.getContext? "2d"
     return false if not @ctx
     @w = canvas.width
@@ -14,6 +14,9 @@ root.gfx =
     @sprites = new Image()
     @sprites.src = "/assets/sprites.png"
     @sprites.onload = -> onload()
+
+    @title = new Image()
+    @title.src = "/assets/title.png"
   drawSprite: (col, row, x, y, w = 1, h = 1, scale = 1) ->
     w *= @tileW
     h *= @tileH
