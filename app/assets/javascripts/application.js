@@ -14,3 +14,5 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require gfx
+//= require player
+//= require keys
