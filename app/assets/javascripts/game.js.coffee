@@ -1,82 +1,37 @@
-game =
+@game =
   init: ->
     if not gfx.init()
-      alert "Could not set up game canvas!"
-      return # abort the game
-
-    # Ready to play!
-    gfx.clear()
-
+      alert "Sorry, no canvas"
+      return
     gfx.load ->
-      c = gfx.ctx
+      game.reset()
+  stop: -> @running = false
+  start: -> @running = true
 
-      # gfx.drawSprite(0, 0, 50, 50)
-      # gfx.drawSprite(0, 0, 74, 50, 1, 1, 2)
+  reset: ->
+    @player = new Player
+    @level = new Level levels[0], @
+    keys.reset()
+    if not @running
+      @start()
+      @tick()
 
-      rand = (max) -> Math.floor Math.random() * max
+  setPlayer: (x, y, level) ->
+    @player.level = level
+    @player.x = x
+    @player.y = y
 
-      makeANinja = () ->
-        x: rand gfx.w
-        y: rand gfx.h
+  tick: ->
+    return if not @running
+    gfx.clear()
+    @update()
+    @render()
+    setTimeout (-> game.tick()), 33
 
-      drawANinja = (n) -> gfx.drawSprite 0, 1, n.x, n.y
+  update: ->
+    @level.update()
+    @player.update()
 
-      ninjas = (makeANinja() for [0...20])
-
-      # drawANinja n for n in ninjas
-
-      leftNinjas = (n for n in ninjas when n.x < gfx.w / 2)
-      # drawANinja n for n in leftNinjas
-
-      level1 = """
-        .............
-        ...........*.
-        ....@#@@@@#@.
-        .....#....#..
-        .....#....#..
-        ..*..#...@@@.
-        ..@@@@@...#..
-        ...#......#..
-        ...#......#..
-        ...#......#..
-        .OOOOOOOOOOOO
-      """
-
-      makeLevel = (ascii) ->
-        # 1. Define the tile-to-symbol map
-        tiles =
-          "@": [4, 1]
-          "O": [4, 0]
-          "*": [5, 1]
-          "#": [5, 0]
-
-        # 2. Cut up the ASCII string into characters
-        asciiMap = (row.split "" for row in ascii.split "\n")
-
-        # 3. Map the characters to their tiles
-        (for row in asciiMap
-          for col in row
-            tiles[col])
-
-      # Create a map from the ascii
-      level = makeLevel level1
-
-      setInterval ->
-        # run game things
-        player.update()
-
-        gfx.clear()
-
-        # Draw the level
-        for row, y in level
-          for tile, x in row
-            continue if not tile
-            xPos = x * gfx.tileW
-            yPos = y * gfx.tileH
-            gfx.drawSprite tile[0], tile[1], xPos, yPos
-
-        player.render(gfx)
-      , 33
-
-# Start the game running
-game.init()
+  render: ->
+    @level.render gfx
+    @player.render gfx

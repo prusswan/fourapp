@@ -13,6 +13,14 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+
 //= require gfx
-//= require player
+//= require blocks/_Block
+//= require_tree ./blocks
+//= require entities/_Entity
+//= require_tree ./entities
+//= require_tree ./levels
+
+
+// require player
 //= require keys
